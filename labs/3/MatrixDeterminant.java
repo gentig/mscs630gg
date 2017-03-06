@@ -23,7 +23,6 @@ import java.util.Scanner;
 public class MatrixDeterminant {
   //Fields
   private static List<Integer> input = new ArrayList<>();
-  private static List<String[]> mConfig = new ArrayList<>();
   /**
    * cofModDet
    *
@@ -60,7 +59,7 @@ public class MatrixDeterminant {
     else {
       int mLength = A.length - 1;
       int[][] M = new int[mLength][mLength];//sub Matrix
-      int counter = 0;
+      int counter;
       /*Get all sub matrices and until we have a 2 x 2 matrix keep calling
       * this function recursively on each submatrix.*/
       for (int m = 0; m < A.length; m++) {
@@ -113,9 +112,9 @@ public class MatrixDeterminant {
    *
    */
   public static void printMatrix(int [][] A){
-    for (int i = 0; i < A.length; i++){
-      for (int j = 0; j < A.length; j++){
-        System.out.print(A[i][j] + " ");
+    for (int [] a: A){
+      for (int j: a){
+        System.out.print(j + " ");
       }
       System.out.println();
     }
@@ -127,48 +126,67 @@ public class MatrixDeterminant {
    *
    * This function scans user input to get the required values
    */
-    public static void scannInput(){
-      Scanner sc = new Scanner(System.in);
-      String line;
-      String [] inputs;
-      int modulo = 0, size = 0, counter = 0;
-      //Get the first two inputs m and n
-      if(sc.hasNextLine() && !(line = sc.nextLine()).equals("")){
-        line = line.trim();
-        inputs = line.split(" ");
-        if(inputs.length > 2){
-          System.out.println("Error: More then two inputs");
-          return;
-        }
-        mConfig.add(inputs);
-        size = Integer.parseInt(mConfig.get(0)[1]);
-        modulo = Integer.parseInt(mConfig.get(0)[0]);
+  private static void scannInput(){
+    Scanner sc = new Scanner(System.in);
+    String line;
+    String [] inputs;
+    int modulo = 0, length = 0, counter = 0;
+    //Get the first two inputs m and n
+    while(sc.hasNextLine() && !(line = sc.nextLine()).equals("")) {
+      //get input
+      line = line.trim();
+      inputs = line.split(" ");
+      //Check if this is the first line of the matrix
+      if(inputs.length > 2 && counter == 0){
+        System.out.println("First line mor than 2 elements");
+        break;
       }
-      while(sc.hasNextLine() && !(line = sc.nextLine()).equals("")){
-        //get input
-        line = line.trim();
-        inputs = line.split(" ");
-        if (inputs.length != size){
-          System.out.println("Int per Line not equal to n");
-          break;
-        }else if (counter >= size){
-          System.out.println("Lines exceed n. Extra info will be omitted");
-          break;
-        }
-        //Continue normally here
-        for (int i = 0; i < inputs.length; i++) {
-          input.add(Integer.parseInt(inputs[i]));
-        }
+      if(counter == 0){
+        //Set config
+        modulo = Integer.parseInt(inputs[0]);
+        length = Integer.parseInt(inputs[1]);
         counter++;
+        continue;
       }
-      int check = (int) Math.pow(size,2);
-      if(input.size() != check){
-        System.out.println("Error");
-        return;
+      //Check number of lines. It should be equal to length
+      if(counter <= length){
+        //Check the row length (how many elements in a line, should be equal to length)
+        if(inputs.length > length){
+          System.out.println("Row length bigger than length");
+          modulo = 0;
+          length = 0;
+          counter = 0;
+          input = new ArrayList<>();
+          continue;
+        }else{
+          //add to arraylist
+          for (String i: inputs) {
+            input.add(Integer.parseInt(i));
+          }
+          counter++;
+        }
       }
-      int [][] aM = buildMatrix(size,input);
-      System.out.println(cofModDet(modulo, aM));
+      if(counter > length) {
+        //print result and reset
+        int check = (int) Math.pow(length, 2);
+        if (input.size() != check) {
+          System.out.println("Error");
+          modulo = 0;
+          length = 0;
+          counter = 0;
+          input = new ArrayList<>();
+          continue;
+        }
+        int[][] aM = buildMatrix(length, input);
+        System.out.println(cofModDet(modulo, aM));
+        //reset variables
+        modulo = 0;
+        length = 0;
+        counter = 0;
+        input = new ArrayList<>();
+      }
     }
+  }
 
   /**
    * buildMatrix

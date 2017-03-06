@@ -21,13 +21,13 @@ import java.util.Scanner;
  * bytes.
  */
 public class PlainToBytes {
-  final static int FULL_MATRIX = 15;//starting at 0
-  final static int MATRIX_SIZE = 4;//n x n
-  final static int INPUT_LINES = 2;
-  final static int FIRST_INPUT_LINE = 0;
-  final static int SECOND_INPUT_LINE = 1;
+  private final static int FULL_MATRIX = 15;//starting at 0
+  private final static int MATRIX_SIZE = 4;//n x n
+  private final static int INPUT_LINES = 2;
+  private final static int FIRST_INPUT_LINE = 0;
+  private final static int SECOND_INPUT_LINE = 1;
   private static List<String> input = new ArrayList<>();
-  private static int adtVal;
+  //private static int adtVal;
 
   /**
    * getHexMatP
@@ -40,8 +40,8 @@ public class PlainToBytes {
    *
    * Return: int matrix
    */
-  public static int[][] getHexMatP(char s, String p){
-    int outI = 0, outJ = 0, counter = 0,length = 0;
+  private static int[][] getHexMatP(char s, String p){
+    int outI = 0, outJ = 0, counter = 0;
     int[][] a = new int[MATRIX_SIZE][MATRIX_SIZE];
     for (int i = 0; i < p.length(); i++){
       int c = (int) p.charAt(i);//get the letter
@@ -82,7 +82,7 @@ public class PlainToBytes {
    *
    * Return: List of strings
    */
-  public static List<String> stringSplit(String str, int size) {
+  private static List<String> stringSplit(String str, int size) {
     List<String> ret = new ArrayList<>((str.length() + size - 1) / size);
 
     for (int start = 0; start < str.length(); start += size) {
@@ -107,7 +107,7 @@ public class PlainToBytes {
   public static int[][] buildPMatrix(char s, String p){
     int quotient = (int) Math.ceil((double) p.length() / 4);
     int adt = (quotient + 4 - 1) / 4 * 4;//formula to get 4 x n size for any string length
-    adtVal = adt;
+    //adtVal = adt;
     int outI = 0, outJ = 0;
     int a[][] = new int[4][adt];
     prepMatrix(a,s,adt);
@@ -133,7 +133,7 @@ public class PlainToBytes {
    *   length: columns of the matrix
    *
    */
-  public static void prepMatrix(int [][] A, char s, int length){
+  private static void prepMatrix(int [][] A, char s, int length){
     for (int i = 0; i < 4; i++){
       for (int j = 0; j < length; j++){
         A[i][j] = s;
@@ -148,7 +148,7 @@ public class PlainToBytes {
    * Parameters:
    *   A: a two dimensional array
    */
-  public static void printMatrixHex(int [][] A){
+  private static void printMatrixHex(int [][] A){
     for (int i = 0; i < 4; i++){
       for (int j = 0; j < A.length; j++){
         String hex = Integer.toHexString(A[i][j]);
@@ -165,7 +165,7 @@ public class PlainToBytes {
    *
    * This function scans user input to get the required values
    */
-  public static void scannInput(){
+  private static void scannInput(){
     Scanner sc = new Scanner(System.in);
     String line;
     //Get the first two inputs m and n
